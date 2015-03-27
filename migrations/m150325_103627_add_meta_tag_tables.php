@@ -45,7 +45,6 @@ class m150325_103627_add_meta_tag_tables extends Migration
                 'model_id' => Schema::TYPE_INTEGER. ' UNSIGNED NOT NULL',
                 'meta_tag_id' => Schema::TYPE_INTEGER. ' UNSIGNED NOT NULL',
                 'meta_tag_content' => Schema::TYPE_TEXT. ' DEFAULT NULL',
-                'description' => Schema::TYPE_STRING. ' NOT NULL DEFAULT "" COMMENT "Short meta tag description"',
                 'created' => Schema::TYPE_DATETIME. ' NOT NULL',
                 'modified' => Schema::TYPE_DATETIME. ' NOT NULL',
             ],
