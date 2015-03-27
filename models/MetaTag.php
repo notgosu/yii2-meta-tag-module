@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
  * @property string $meta_tag_name
  * @property string $meta_tag_http_equiv
  * @property string $meta_tag_default_value
+ * @property string $tag_description
  * @property integer $is_active
  * @property integer $position
  * @property string $created
