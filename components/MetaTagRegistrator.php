@@ -5,6 +5,7 @@
 
 namespace notgosu\yii2\modules\metaTag\components;
 
+use notgosu\yii2\modules\metaTag\models\MetaTag;
 use notgosu\yii2\modules\metaTag\models\MetaTagContent;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -29,6 +30,8 @@ class MetaTagRegistrator
 
         if (!empty($metaTagsToFetch)) {
             $metaTagsForModel->andWhere(['meta_tag_name' => $metaTagsToFetch]);
+        } else {
+            $metaTagsForModel->andWhere([MetaTag::tableName().'.is_active' => 1]);
         }
 
         $metaTagsForModel = $metaTagsForModel->all();
@@ -41,20 +44,19 @@ class MetaTagRegistrator
                 } else {
                     $content = $metaTag->meta_tag_content;
                 }
-
-                if (strtolower($metaTag->metaTag->meta_tag_name) === 'title') {
-                    \Yii::$app->getView()->title = $content;
-                } else {
-                    \Yii::$app->view->registerMetaTag(
-                        [
-                            'name' => $metaTag->metaTag->meta_tag_name,
-                            'content' => $content
-                        ],
-                        $metaTag->metaTag->meta_tag_name
-                    );
+                if (!empty($content)) {
+                    if (strtolower($metaTag->metaTag->meta_tag_name) === 'title') {
+                        \Yii::$app->getView()->title = $content;
+                    } else {
+                        \Yii::$app->view->registerMetaTag(
+                            [
+                                'name' => $metaTag->metaTag->meta_tag_name,
+                                'content' => $content
+                            ],
+                            $metaTag->metaTag->meta_tag_name
+                        );
+                    }
                 }
-
-
             }
         }
     }
