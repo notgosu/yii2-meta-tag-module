@@ -1,0 +1,33 @@
+{
+    "name": "notgosu/yii2-meta-tag-module",
+    "description": "Yii2 meta tag module for creating and setting meta tags for your site",
+    "version": "0.1.0",
+    "type": "yii2-extension",
+    "keywords": [
+        "yii2",
+        "meta tag",
+        "seo"
+    ],
+    "homepage": "https://github.com/notgosu/yii2-meta-tag-module",
+    "time": "2015-27-03",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Naumenko Pavel",
+            "email": "not.gosu@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/notgosu/yii2-meta-tag-module/issues",
+        "source": "https://github.com/notgosu/yii2-meta-tag-module"
+    },
+    "require": {
+        "yiisoft/yii2": "~2"
+    },
+    "autoload": {
+        "psr-4": {
+            "notgosu\\yii2\\modules\\metaTag\\": ""
+        }
+    }
+}
