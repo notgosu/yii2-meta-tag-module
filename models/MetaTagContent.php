@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property string $model_id
  * @property integer $meta_tag_id
  * @property string $meta_tag_content
+ * @property string $description
  * @property string $created
  * @property string $modified
  *
