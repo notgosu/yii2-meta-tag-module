@@ -1,6 +1,6 @@
 <?php
 
-namespace notgosu\yii2\modules\models;
+namespace notgosu\yii2\modules\metaTag\models;
 
 use Yii;
 use yii\db\ActiveRecord;

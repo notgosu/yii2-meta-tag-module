@@ -3,9 +3,9 @@
  * Author: Pavel Naumenko
  */
 
-namespace notgosu\yii2\modules\components;
+namespace notgosu\yii2\modules\metaTag\components;
 
-use notgosu\yii2\modules\models\MetaTagContent;
+use notgosu\yii2\modules\metaTag\models\MetaTagContent;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 

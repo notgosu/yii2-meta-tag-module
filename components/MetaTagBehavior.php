@@ -2,11 +2,11 @@
 /**
  * Author: Pavel Naumenko
  */
-namespace notgosu\yii2\modules\components;
+namespace notgosu\yii2\modules\metaTag\components;
 
-use notgosu\yii2\modules\models\MetaTag;
-use notgosu\yii2\modules\models\MetaTagContent;
-use notgosu\yii2\modules\models\MetaTagContentLang;
+use notgosu\yii2\modules\metaTag\models\MetaTag;
+use notgosu\yii2\modules\metaTag\models\MetaTagContent;
+use notgosu\yii2\modules\metaTag\models\MetaTagContentLang;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
@@ -227,7 +227,7 @@ class MetaTagBehavior extends Behavior
     {
         $returnTagList = [];
         /**
-         * @var \notgosu\yii2\modules\models\MetaTag $tag
+         * @var \notgosu\yii2\modules\metaTag\models\MetaTag $tag
          */
         foreach ($tagList as $tag) {
             $data = [];

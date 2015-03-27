@@ -2,7 +2,7 @@
 /**
  * Author: Pavel Naumenko
  */
-namespace notgosu\yii2\modules\widgets\seoForm;
+namespace notgosu\yii2\modules\metaTag\widgets\seoForm;
 
 /**
  * Class Widget
@@ -21,7 +21,7 @@ class Widget extends \yii\base\Widget
     public function run()
     {
         /**
-         * @var \notgosu\yii2\modules\components\MetaTagBehavior $behavior
+         * @var \notgosu\yii2\modules\metaTag\components\MetaTagBehavior $behavior
          */
         $behavior = $this->model->getBehavior('seo');
         if (!$behavior) {

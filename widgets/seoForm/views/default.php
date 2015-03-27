@@ -6,7 +6,7 @@
  * @var array $languageList
  * @var string $defaultLanguage
  */
-use notgosu\yii2\modules\models\MetaTagContent;
+use notgosu\yii2\modules\metaTag\models\MetaTagContent;
 use yii\helpers\Html;
 
 foreach ($model->seoData as $i => $data) {
