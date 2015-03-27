@@ -158,7 +158,8 @@ class MetaTagBehavior extends Behavior
             $existMetaData = MetaTagContent::find()
                 ->where([MetaTagContent::tableName().'.model_name' => (new \ReflectionClass($model))->getShortName()])
                 ->andWhere([MetaTagContent::tableName().'.model_id' => $model->id])
-                ->joinWith(['metaTagContentLangs'])
+                ->joinWith(['metaTagContentLangs', 'metaTag'])
+                ->orderBy([MetaTag::tableName().'.position' => SORT_DESC])
                 ->all();
 
             if (!empty($existMetaData)) {
@@ -179,11 +180,14 @@ class MetaTagBehavior extends Behavior
                         }
                     }
 
-                    $metaData[] = $data;
+                    $metaData[$eData->metaTag->position] = $data;
                     $existModelTagIds[] = $eData->meta_tag_id;
                 }
 
                 $metaData = ArrayHelper::merge($metaData, $this->addNewMetaTagToMetaTagList($metaTagList, $existModelTagIds));
+
+                //Sort tags as they appear at meta_tag table
+                krsort($metaData);
 
                 return $metaData;
             } else {
@@ -211,7 +215,7 @@ class MetaTagBehavior extends Behavior
                 $data['meta_tag_content'] = $tag->meta_tag_default_value;
                 $data['tagName'] = $tag->meta_tag_name;
 
-                $metaData[] = $data;
+                $metaData[$tag->position] = $data;
             }
         }
 
@@ -248,6 +252,7 @@ class MetaTagBehavior extends Behavior
     {
         return MetaTag::find()
             ->where(['is_active' => 1])
+            ->orderBy(['position' => SORT_DESC])
             ->all();
     }
 }
