@@ -6,11 +6,11 @@ namespace notgosu\yii2\modules\metaTag\components;
 
 use notgosu\yii2\modules\metaTag\models\MetaTag;
 use notgosu\yii2\modules\metaTag\models\MetaTagContent;
-use notgosu\yii2\modules\metaTag\models\MetaTagContentLang;
+use notgosu\yii2\modules\metaTag\Module;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
+use yii\base\Model;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 use yii\validators\SafeValidator;
 
 /**
@@ -27,19 +27,11 @@ class MetaTagBehavior extends Behavior
     public $seoData;
 
     /**
-     * List of application languages used
+     * List of application languages used (locales)
      *
      * @var array
      */
-    public $languages = [];
-
-    /**
-     * Code of the default language
-     *
-     * @var string
-     */
-    public $defaultLanguage;
-
+    public $languages;
 
     /**
      * @inheritdoc
@@ -66,8 +58,18 @@ class MetaTagBehavior extends Behavior
     {
         parent::init();
 
-        if (!empty($this->languages) && empty($this->defaultLanguage)) {
-            throw new InvalidConfigException('You must define default language when languages property set.');
+        if ($this->languages instanceof \Closure) {
+            $this->languages = call_user_func($this->languages);
+        }
+
+        if (!is_array($this->languages)) {
+            throw new InvalidConfigException(Module::t('metaTag', 'MetaTagBehavior::languages have to be array.'));
+        }
+
+        if (empty($this->languages)) {
+            throw new InvalidConfigException(
+                Module::t('metaTag', 'MetaTagBehavior::languages have to contains at least 1 item.')
+            );
         }
     }
 
@@ -78,7 +80,7 @@ class MetaTagBehavior extends Behavior
     {
         parent::attach($owner);
 
-        $this->seoData = $this->getMetaTagList($owner);
+        $this->seoData = $this->getMetaTagList();
     }
 
     /**
@@ -86,7 +88,7 @@ class MetaTagBehavior extends Behavior
      */
     public function loadMetaTags()
     {
-        $this->seoData = $this->getMetaTagList($this->owner);
+        $this->seoData = $this->getMetaTagList();
     }
 
     /**
@@ -94,43 +96,22 @@ class MetaTagBehavior extends Behavior
      */
     public function saveMetaTags()
     {
-        $this->deleteOldMetaData($this->owner);
-        $modelName = (new \ReflectionClass($this->owner))->getShortName();
-        $modelId = $this->owner->id;
+        $this->deleteOldMetaData();
 
-        foreach ($this->seoData as $seo) {
-            $model = new MetaTagContent();
-            $model->model_name = $modelName;
-            $model->model_id = $modelId;
-            $model->meta_tag_id = $seo['meta_tag_id'];
-            $model->meta_tag_content = $seo['meta_tag_content'];
-            if ($model->save(false)) {
-                //Save data for additional languages
-                if (!empty($this->languages)) {
-                    foreach ($this->languages as $lang) {
-                        $langModel = new MetaTagContentLang();
-                        $langModel->model_id = $model->id;
-                        $langModel->lang_id = $lang;
-                        if ($lang != $this->defaultLanguage) {
-                            $langModel->meta_tag_content = $seo['meta_tag_content_'.$lang];
-                        } else {
-                            $langModel->meta_tag_content = $seo['meta_tag_content'];
-                        }
+        $current = $this->getMetaTagList();
+        Model::loadMultiple($current, $this->seoData, '');
 
-                        $langModel->save(false);
-                    }
-                }
-            }
+        foreach ($current as $seo) {
+            $seo->save(false);
         }
     }
 
     /**
-     * @param ActiveRecord $model
-     *
      * @throws \yii\db\Exception
      */
-    protected function deleteOldMetaData(ActiveRecord $model)
+    protected function deleteOldMetaData()
     {
+        $model = $this->owner;
         $modelName = (new \ReflectionClass($model))->getShortName();
         $modelId = $model->id;
 
@@ -143,79 +124,50 @@ class MetaTagBehavior extends Behavior
     }
 
     /**
-     * @param ActiveRecord $model
-     *
      * @return array
      */
-    protected function getMetaTagList(ActiveRecord $model)
+    protected function getMetaTagList()
     {
+        $model = $this->owner;
         $metaTagList = $this->getTagList();
+        $id = $model->id;
+        $modelName = (new \ReflectionClass($model))->getShortName();
 
         if ($model->isNewRecord) {
-            return $this->getTagListForNewModel($metaTagList);
+            $metaData = $this->createNewTags($metaTagList);
         } else {
-            $metaData = [];
-            $existMetaData = MetaTagContent::find()
-                ->where([MetaTagContent::tableName().'.model_name' => (new \ReflectionClass($model))->getShortName()])
-                ->andWhere([MetaTagContent::tableName().'.model_id' => $model->id])
-                ->joinWith(['metaTagContentLangs', 'metaTag'])
-                ->orderBy([MetaTag::tableName().'.position' => SORT_DESC])
+            $existing = MetaTagContent::find()
+                ->where([MetaTagContent::tableName() . '.model_name' => $modelName])
+                ->andWhere([MetaTagContent::tableName() . '.model_id' => $id])
+                ->joinWith(['metaTag'])
+                ->orderBy([MetaTag::tableName() . '.position' => SORT_DESC])
+                ->indexBy(function ($row) {
+                    return $row->meta_tag_id . $row->language;
+                })
                 ->all();
 
-            if (!empty($existMetaData)) {
-                $existModelTagIds = [];
+            $metaData = $existing;
 
-                //Fill exist data with languages to seoData property
-                foreach ($existMetaData as $eData) {
-                    $data['meta_tag_id'] = $eData->meta_tag_id;
-                    $data['meta_tag_content'] = $eData->meta_tag_content;
-                    $data['tagName'] = $eData->metaTag->meta_tag_name;
-                    if (!empty($this->languages)) {
-                        foreach ($this->languages as $lang) {
-                            foreach ($eData->metaTagContentLangs as $metaTagLang) {
-                                if ($metaTagLang->lang_id == $lang) {
-                                    $data['meta_tag_content_'.$lang] = $metaTagLang->meta_tag_content;
-                                }
-                            }
+            if (!empty($existing)) {
+
+                foreach ($metaTagList as $tag) {
+                    foreach ($this->languages as $language) {
+                        if (!isset($existing[$tag->id . $language])) {
+                            $data = new MetaTagContent();
+                            $data->model_id = $id;
+                            $data->model_name = $modelName;
+                            $data->meta_tag_id = $tag->id;
+                            $data->meta_tag_content = $tag->default_value;
+                            $data->language = $language;
+                            $data->populateRelation('metaTag', $tag);
+
+                            $metaData[$tag->id . $language] = $data;
                         }
                     }
-
-                    $metaData[$eData->metaTag->position] = $data;
-                    $existModelTagIds[] = $eData->meta_tag_id;
                 }
 
-                $metaData = ArrayHelper::merge($metaData, $this->addNewMetaTagToMetaTagList($metaTagList, $existModelTagIds));
-
-                //Sort tags as they appear at meta_tag table
-                krsort($metaData);
-
-                return $metaData;
             } else {
-                return $this->getTagListForNewModel($metaTagList);
-            }
-        }
-
-    }
-
-    /**
-     * Check if there is some new tags available to fill, but not saved with this model before
-     *
-     * @param $metaTagList
-     * @param $existModelTagIds
-     *
-     * @return array
-     */
-    protected function addNewMetaTagToMetaTagList($metaTagList, $existModelTagIds)
-    {
-        $metaData = [];
-
-        foreach ($metaTagList as $tag) {
-            if (!in_array($tag->id, $existModelTagIds)) {
-                $data['meta_tag_id'] = $tag->id;
-                $data['meta_tag_content'] = $tag->meta_tag_default_value;
-                $data['tagName'] = $tag->meta_tag_name;
-
-                $metaData[$tag->position] = $data;
+                $metaData = $this->createNewTags($metaTagList);
             }
         }
 
@@ -227,30 +179,42 @@ class MetaTagBehavior extends Behavior
      *
      * @return array
      */
-    protected function getTagListForNewModel(array $tagList)
+    protected function createNewTags(array $tagList)
     {
-        $returnTagList = [];
+        $model = $this->owner;
+        $list = [];
+        $id = $model->id;
+        $modelName = (new \ReflectionClass($model))->getShortName();
         /**
          * @var \notgosu\yii2\modules\metaTag\models\MetaTag $tag
          */
         foreach ($tagList as $tag) {
-            $data = [];
-            $data['meta_tag_id'] = $tag->id;
-            $data['meta_tag_content'] = $tag->meta_tag_default_value;
-            $data['tagName'] = $tag->meta_tag_name;
+            foreach ($this->languages as $language) {
+                $data = new MetaTagContent();
+                $data->model_name = $modelName;
+                $data->model_id = $id;
+                $data->meta_tag_id = $tag->id;
+                $data->meta_tag_content = $tag->default_value;
+                $data->language = $language;
+                $data->populateRelation('metaTag', $tag);
 
-            $returnTagList[] = $data;
+                $list[$tag->id . $language] = $data;
+            }
+
         }
 
-        return $returnTagList;
+        return $list;
     }
 
     /**
-     * @return mixed
+     * Get list of active meta tags
+     *
+     * @return MetaTag[]
      */
     protected function getTagList()
     {
         return MetaTag::find()
+            ->where('is_active = :is_active', [':is_active' => 1])
             ->orderBy(['position' => SORT_DESC])
             ->all();
     }

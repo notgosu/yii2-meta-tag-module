@@ -2,6 +2,7 @@
 /**
  * Author: Pavel Naumenko
  */
+
 namespace notgosu\yii2\modules\metaTag\widgets\seoForm;
 
 /**
@@ -29,12 +30,10 @@ class Widget extends \yii\base\Widget
         }
 
         $languageList = $behavior->languages;
-        $defaultLanguage = $behavior->defaultLanguage;
 
         return $this->render('default', [
             'model' => $this->model,
             'languageList' => $languageList,
-            'defaultLanguage' => $defaultLanguage
         ]);
     }
 }
