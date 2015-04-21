@@ -28,9 +28,9 @@ class m150421_093238_create_meta_tag_table extends \yii\db\Migration
                 'id' => Schema::TYPE_PK,
 
                 'name' => Schema::TYPE_STRING . ' NOT NULL COMMENT "Specifies a name for the metadata"',
-                'http_equiv' => Schema::TYPE_STRING . ' NOT NULL COMMENT "Provides an HTTP header for the information/value of the content attribute"',
-                'default_value' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT "Default value for the meta tag"',
-                'description' => Schema::TYPE_STRING . ' NOT NULL COMMENT "Short description for tag"',
+                'http_equiv' => Schema::TYPE_STRING . ' NULL DEFAULT NULL COMMENT "Provides an HTTP header for the information/value of the content attribute"',
+                'default_value' => Schema::TYPE_TEXT . ' NULL DEFAULT NULL COMMENT "Default value for the meta tag"',
+                'description' => Schema::TYPE_STRING . ' NULL DEFAULT NULL COMMENT "Short description for tag"',
                 'is_active' => Schema::TYPE_SMALLINT . '(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT "Register or not this tag on the front"',
                 'position' => Schema::TYPE_INTEGER . ' UNSIGNED NOT NULL DEFAULT 0',
             ],

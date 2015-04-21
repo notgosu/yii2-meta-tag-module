@@ -34,9 +34,10 @@ class MetaTag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'http_equiv', 'description'], 'required'],
+            [['name', 'description'], 'required'],
             [['default_value'], 'string'],
-            [['is_active', 'position'], 'integer'],
+            [['position'], 'integer'],
+            [['is_active'], 'boolean'],
             [['name', 'http_equiv', 'description'], 'string', 'max' => 255]
         ];
     }
@@ -48,11 +49,11 @@ class MetaTag extends \yii\db\ActiveRecord
     {
         return [
             'id' => Module::t('metaTag', 'ID'),
-            'name' => Module::t('metaTag', 'Specifies a name for the metadata'),
-            'http_equiv' => Module::t('metaTag', 'Provides an HTTP header for the information/value of the content attribute'),
-            'default_value' => Module::t('metaTag', 'Default value for the meta tag'),
-            'description' => Module::t('metaTag', 'Short description for tag'),
-            'is_active' => Module::t('metaTag', 'Register or not this tag on the front'),
+            'name' => Module::t('metaTag', 'Meta tag name'),
+            'http_equiv' => Module::t('metaTag', 'HTTP equiv'),
+            'default_value' => Module::t('metaTag', 'Default value'),
+            'description' => Module::t('metaTag', 'Description'),
+            'is_active' => Module::t('metaTag', 'Registered on page'),
             'position' => Module::t('metaTag', 'Position'),
         ];
     }

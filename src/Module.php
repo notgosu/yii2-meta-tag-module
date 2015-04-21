@@ -3,6 +3,7 @@
 namespace notgosu\yii2\modules\metaTag;
 
 use Yii;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Module
@@ -45,5 +46,24 @@ class Module extends \yii\base\Module
     public static function t($category, $message, $params = [], $language = null)
     {
         return Yii::t($category, $message, $params, $language);
+    }
+
+    /**
+     * Generate route to tag controller
+     *
+     * @return array
+     * @throws InvalidConfigException
+     */
+    public static function getTagRoute()
+    {
+        $module = static::getInstance();
+
+        if (!$module || !($module instanceof Module)) {
+            throw new InvalidConfigException(Module::t('metaTag', 'You need configure MetaTag module first!'));
+        }
+
+        $id = $module->id;
+
+        return ["/{$id}/tag/index"];
     }
 }
