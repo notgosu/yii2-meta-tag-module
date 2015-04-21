@@ -2,29 +2,22 @@
 
 namespace notgosu\yii2\modules\metaTag\models;
 
+use notgosu\yii2\modules\metaTag\Module;
 use Yii;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%meta_tag_content}}".
  *
- * @property integer $id
  * @property string $model_name
- * @property string $model_id
+ * @property integer $model_id
+ * @property string $language
  * @property integer $meta_tag_id
  * @property string $meta_tag_content
- * @property string $created
- * @property string $modified
  *
  * @property MetaTag $metaTag
- * @property MetaTagContentLang[] $metaTagContentLangs
  */
-class MetaTagContent extends ActiveRecord
+class MetaTagContent extends \yii\db\ActiveRecord
 {
-    public $tagName;
-
     /**
      * @inheritdoc
      */
@@ -36,21 +29,29 @@ class MetaTagContent extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function rules()
     {
-        return ArrayHelper::merge(
-            parent::behaviors(),
-            [
-                [
-                    'class' => TimestampBehavior::className(),
-                    'createdAtAttribute' => 'created',
-                    'updatedAtAttribute' => 'modified',
-                    'value' => function () {
-                        return date("Y-m-d H:i:s");
-                    }
-                ],
-            ]
-        );
+        return [
+            [['model_name', 'model_id', 'language', 'meta_tag_id'], 'required'],
+            [['model_id', 'meta_tag_id'], 'integer'],
+            [['meta_tag_content'], 'string'],
+            [['model_name'], 'string', 'max' => 255],
+            [['language'], 'string', 'max' => 16]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'model_name' => Module::t('metaTag', 'Model name'),
+            'model_id' => Module::t('metaTag', 'Model ID'),
+            'language' => Module::t('metaTag', 'Language'),
+            'meta_tag_id' => Module::t('metaTag', 'Meta tag'),
+            'meta_tag_content' => Module::t('metaTag', 'Meta tag content'),
+        ];
     }
 
     /**
@@ -59,13 +60,5 @@ class MetaTagContent extends ActiveRecord
     public function getMetaTag()
     {
         return $this->hasOne(MetaTag::className(), ['id' => 'meta_tag_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMetaTagContentLangs()
-    {
-        return $this->hasMany(MetaTagContentLang::className(), ['model_id' => 'id']);
     }
 }
