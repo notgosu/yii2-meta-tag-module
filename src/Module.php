@@ -12,58 +12,89 @@ use yii\base\InvalidConfigException;
  */
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'notgosu\yii2\modules\metaTag\controllers';
 
-    public function init()
-    {
-        parent::init();
+	public $controllerNamespace = 'notgosu\yii2\modules\metaTag\controllers';
 
-        $this->registerTranslations();
-    }
+	/**
+	 * @var array list of application languages used (locales)
+	 */
+	public $languages;
 
-    /**
-     * Register translate messages for module
-     */
-    public function registerTranslations()
-    {
-        Yii::$app->i18n->translations['metaTag'] = [
-            'class' => 'yii\i18n\PhpMessageSource',
-            'sourceLanguage' => 'en-US',
-            'basePath' => '@notgosu/yii2/modules/metaTag/messages',
-        ];
-    }
+	public function init()
+	{
+		parent::init();
 
-    /**
-     * Translate shortcut
-     *
-     * @param $category
-     * @param $message
-     * @param array $params
-     * @param null $language
-     *
-     * @return string
-     */
-    public static function t($category, $message, $params = [], $language = null)
-    {
-        return Yii::t($category, $message, $params, $language);
-    }
+		if ($this->languages instanceof \Closure) {
+			$this->languages = call_user_func($this->languages);
+		}
 
-    /**
-     * Generate route to tag controller
-     *
-     * @return array
-     * @throws InvalidConfigException
-     */
-    public static function getTagRoute()
-    {
-        $module = static::getInstance();
+		if (!is_array($this->languages)) {
+			throw new InvalidConfigException(Module::t('metaTag', 'MetaTag module [languages] have to be array.'));
+		}
 
-        if (!$module || !($module instanceof Module)) {
-            throw new InvalidConfigException(Module::t('metaTag', 'You need configure MetaTag module first!'));
-        }
+		if (empty($this->languages)) {
+			throw new InvalidConfigException(
+				Module::t('metaTag', 'MetaTag module [languages] have to contains at least 1 item.')
+			);
+		}
 
-        $id = $module->id;
+		$this->registerTranslations();
+	}
 
-        return ["/{$id}/tag/index"];
-    }
+	/**
+	 * Register translate messages for module
+	 */
+	public function registerTranslations()
+	{
+		Yii::$app->i18n->translations['metaTag'] = [
+			'class' => 'yii\i18n\PhpMessageSource',
+			'sourceLanguage' => 'en-US',
+			'basePath' => '@notgosu/yii2/modules/metaTag/messages',
+		];
+	}
+
+	/**
+	 * Translate shortcut
+	 *
+	 * @param $category
+	 * @param $message
+	 * @param array $params
+	 * @param null $language
+	 *
+	 * @return string
+	 */
+	public static function t($category, $message, $params = [], $language = null)
+	{
+		return Yii::t($category, $message, $params, $language);
+	}
+
+	/**
+	 * Generate route to tag controller
+	 *
+	 * @return array
+	 * @throws InvalidConfigException
+	 */
+	public static function getTagRoute()
+	{
+		$module = static::getInstance();
+
+		if (!$module || !($module instanceof Module)) {
+			throw new InvalidConfigException(Module::t('metaTag', 'You need configure MetaTag module first!'));
+		}
+
+		$id = $module->id;
+
+		return ["/{$id}/tag/index"];
+	}
+
+	public static function getLanguages()
+	{
+		$module = static::getInstance();
+
+		if (!$module || !($module instanceof Module)) {
+			throw new InvalidConfigException(Module::t('metaTag', 'You need configure MetaTag module first!'));
+		}
+
+		return $module->languages;
+	}
 }
