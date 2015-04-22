@@ -12,7 +12,7 @@ use Yii;
  * @property integer $model_id
  * @property string $language
  * @property integer $meta_tag_id
- * @property string $meta_tag_content
+ * @property string $content
  *
  * @property MetaTag $metaTag
  */

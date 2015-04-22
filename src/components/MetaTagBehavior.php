@@ -167,7 +167,6 @@ class MetaTagBehavior extends Behavior
     protected function getTagList()
     {
         return MetaTag::find()
-            ->where('is_active = :is_active', [':is_active' => 1])
             ->orderBy(['position' => SORT_DESC])
             ->all();
     }

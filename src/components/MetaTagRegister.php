@@ -12,9 +12,9 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
 /**
- * Trait MetaTagRegister
+ * class MetaTagRegister
  */
-trait MetaTagRegister
+class MetaTagRegister
 {
     /**
      * @param ActiveRecord $model
