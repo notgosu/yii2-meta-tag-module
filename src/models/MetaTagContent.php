@@ -29,6 +29,20 @@ class MetaTagContent extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public function rules()
+    {
+        return [
+            [['model_name', 'model_id', 'language', 'meta_tag_id'], 'required'],
+            [['model_id', 'meta_tag_id'], 'integer'],
+            [['content'], 'string'],
+            [['model_name'], 'string', 'max' => 50],
+            [['language'], 'string', 'max' => 16],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
