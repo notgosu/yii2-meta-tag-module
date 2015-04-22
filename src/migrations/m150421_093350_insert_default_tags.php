@@ -27,7 +27,7 @@ class m150421_093350_insert_default_tags extends \yii\db\Migration
             ],
             [
                 [
-                    'title',
+                    \notgosu\yii2\modules\metaTag\models\MetaTag::META_TITLE_NAME,
                     'Page title',
                     1,
                     3,

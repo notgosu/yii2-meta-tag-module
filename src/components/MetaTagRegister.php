@@ -51,19 +51,10 @@ class MetaTagRegister
                     if ($metaTag->metaTag->name) {
                         Yii::$app->view->registerMetaTag(
                             [
-                                'name' => $metaTag->metaTag->name,
+                                ($metaTag->metaTag->is_http_equiv ? 'http-equiv' : 'name') => $metaTag->metaTag->name,
                                 'content' => $content,
                             ],
                             $metaTag->metaTag->name
-                        );
-                    }
-                    if ($metaTag->metaTag->http_equiv) {
-                        Yii::$app->view->registerMetaTag(
-                            [
-                                'http-equiv' => $metaTag->metaTag->http_equiv,
-                                'content' => $content,
-                            ],
-                            $metaTag->metaTag->http_equiv
                         );
                     }
                 }

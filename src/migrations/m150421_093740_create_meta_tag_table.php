@@ -25,12 +25,12 @@ class m150421_093740_create_meta_tag_table extends \yii\db\Migration
         $this->createTable(
             $this->tableName,
             [
-                'model_name' => Schema::TYPE_STRING . ' NOT NULL COMMENT "Model name"',
-                'model_id' => Schema::TYPE_INTEGER . ' UNSIGNED NOT NULL COMMENT "Model ID"',
+                'model_name' => Schema::TYPE_STRING . '(50) NOT NULL COMMENT "Model name"',
+                'model_id' => Schema::TYPE_INTEGER . ' NOT NULL COMMENT "Model ID"',
                 'language' => Schema::TYPE_STRING . '(16) NOT NULL COMMENT "Language"',
 
                 'meta_tag_id' => Schema::TYPE_INTEGER . ' NOT NULL COMMENT "Meta tag"',
-                'content' => Schema::TYPE_TEXT . ' NOT NULL COMMENT "Meta tag content"',
+                'content' => Schema::TYPE_TEXT . ' NULL DEFAULT NULL COMMENT "Meta tag content"',
             ],
             $tableOptions
         );

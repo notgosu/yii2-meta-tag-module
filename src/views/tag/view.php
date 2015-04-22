@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'id',
                 'name',
-                'http_equiv',
+                'is_http_equiv:boolean',
                 'default_value:ntext',
                 'description',
                 'is_active:boolean',

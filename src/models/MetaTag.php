@@ -10,7 +10,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
- * @property string $http_equiv
+ * @property string $is_http_equiv
  * @property string $default_value
  * @property string $description
  * @property integer $is_active
@@ -36,11 +36,12 @@ class MetaTag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'description'], 'required'],
+            [['name'], 'required'],
+            [['name'], 'unique'],
             [['default_value'], 'string'],
             [['position'], 'integer'],
-            [['is_active'], 'boolean'],
-            [['name', 'http_equiv', 'description'], 'string', 'max' => 255],
+            [['is_active', 'is_http_equiv'], 'boolean'],
+            [['name', 'description'], 'string', 'max' => 255],
             [['position'], 'default', 'value' => 0],
         ];
     }
@@ -53,7 +54,7 @@ class MetaTag extends \yii\db\ActiveRecord
         return [
             'id' => Module::t('metaTag', 'ID'),
             'name' => Module::t('metaTag', 'Meta tag name'),
-            'http_equiv' => Module::t('metaTag', 'HTTP equiv'),
+            'is_http_equiv' => Module::t('metaTag', 'Is HTTP equiv'),
             'default_value' => Module::t('metaTag', 'Default value'),
             'description' => Module::t('metaTag', 'Description'),
             'is_active' => Module::t('metaTag', 'Registered on page'),

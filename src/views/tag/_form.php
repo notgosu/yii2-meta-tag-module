@@ -14,11 +14,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'http_equiv')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'default_value')->textarea(['rows' => 3]) ?>
+    <?= $form->field($model, 'is_http_equiv')->checkbox() ?>
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'default_value')->textarea(['rows' => 3]) ?>
 
     <?= $form->field($model, 'is_active')->checkbox() ?>
 

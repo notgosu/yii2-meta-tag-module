@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 'id',
                 'name',
-                'http_equiv',
+                'is_http_equiv:boolean',
                 'default_value:ntext',
                 'description',
                 'is_active:boolean',
