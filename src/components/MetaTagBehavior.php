@@ -147,7 +147,7 @@ class MetaTagBehavior extends Behavior
                     $data->model_id = $id;
                     $data->model_name = $modelName;
                     $data->meta_tag_id = $tag->id;
-                    $data->meta_tag_content = $tag->default_value;
+                    $data->content = $tag->default_value;
                     $data->language = $language;
                     $data->populateRelation('metaTag', $tag);
 

@@ -12,8 +12,8 @@ use yii\helpers\Html;
 foreach ($model->metaTags as $i => $data) {
     echo Html::beginTag('div', ['class' => 'form-group']);
 
-    echo Html::activeLabel($model, 'metaTags[' . $i . '][meta_tag_content]', ['class' => 'control-label', 'label' => $data->metaTag->name . '[' . $data->language . ']']);
-    echo Html::activeTextInput($model, 'metaTags[' . $i . '][meta_tag_content]', ['class' => 'form-control']);
+    echo Html::activeLabel($model, 'metaTags[' . $i . '][content]', ['class' => 'control-label', 'label' => $data->metaTag->name . '[' . $data->language . ']']);
+    echo Html::activeTextInput($model, 'metaTags[' . $i . '][content]', ['class' => 'form-control']);
 
     echo Html::endTag('div');
 }

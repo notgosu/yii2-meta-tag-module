@@ -30,7 +30,7 @@ class m150421_093740_create_meta_tag_table extends \yii\db\Migration
                 'language' => Schema::TYPE_STRING . '(16) NOT NULL COMMENT "Language"',
 
                 'meta_tag_id' => Schema::TYPE_INTEGER . ' NOT NULL COMMENT "Meta tag"',
-                'meta_tag_content' => Schema::TYPE_TEXT . ' NOT NULL COMMENT "Meta tag content"',
+                'content' => Schema::TYPE_TEXT . ' NOT NULL COMMENT "Meta tag content"',
             ],
             $tableOptions
         );

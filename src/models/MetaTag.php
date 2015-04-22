@@ -40,7 +40,8 @@ class MetaTag extends \yii\db\ActiveRecord
             [['default_value'], 'string'],
             [['position'], 'integer'],
             [['is_active'], 'boolean'],
-            [['name', 'http_equiv', 'description'], 'string', 'max' => 255]
+            [['name', 'http_equiv', 'description'], 'string', 'max' => 255],
+            [['position'], 'default', 'value' => 0],
         ];
     }
 

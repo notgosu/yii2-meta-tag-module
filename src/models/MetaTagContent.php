@@ -34,9 +34,9 @@ class MetaTagContent extends \yii\db\ActiveRecord
         return [
             [['model_name', 'model_id', 'language', 'meta_tag_id'], 'required'],
             [['model_id', 'meta_tag_id'], 'integer'],
-            [['meta_tag_content'], 'string'],
+            [['content'], 'string'],
             [['model_name'], 'string', 'max' => 255],
-            [['language'], 'string', 'max' => 16]
+            [['language'], 'string', 'max' => 16],
         ];
     }
 
@@ -50,7 +50,7 @@ class MetaTagContent extends \yii\db\ActiveRecord
             'model_id' => Module::t('metaTag', 'Model ID'),
             'language' => Module::t('metaTag', 'Language'),
             'meta_tag_id' => Module::t('metaTag', 'Meta tag'),
-            'meta_tag_content' => Module::t('metaTag', 'Meta tag content'),
+            'content' => Module::t('metaTag', 'Meta tag content'),
         ];
     }
 
