@@ -3,7 +3,7 @@
  * Author: Pavel Naumenko
  */
 
-namespace notgosu\yii2\modules\metaTag\widgets\seoForm;
+namespace notgosu\yii2\modules\metaTag\widgets\metaTagForm;
 
 /**
  * Class Widget

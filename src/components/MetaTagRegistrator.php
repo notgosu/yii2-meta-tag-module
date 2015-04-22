@@ -12,7 +12,6 @@ use yii\helpers\ArrayHelper;
 
 /**
  * Class MetaTagRegistrator
- * @package common\modules\seo\components
  */
 class MetaTagRegistrator
 {
