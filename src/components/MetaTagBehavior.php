@@ -24,7 +24,7 @@ class MetaTagBehavior extends Behavior
      *
      * @var array
      */
-    public $metaTags;
+    public $metaTags = [];
 
     /**
      * List of application languages used (locales)
@@ -46,6 +46,13 @@ class MetaTagBehavior extends Behavior
             ActiveRecord::EVENT_AFTER_DELETE => 'deleteExistingMetaTags'
         ];
     }
+
+    public function attach($owner)
+    {
+        parent::attach($owner);
+        $this->metaTags = $this->getExistingMetaTags();
+    }
+
 
     public function attachValidator()
     {
