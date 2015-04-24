@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "notgosu\\yii2\\modules\\metaTag\\": ""
+            "notgosu\\yii2\\modules\\metaTag\\": "src"
         }
     }
 }
