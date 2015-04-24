@@ -1,7 +1,7 @@
 {
     "name": "notgosu/yii2-meta-tag-module",
     "description": "Yii2 meta tag module for creating and setting meta tags for your site",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "type": "yii2-extension",
     "keywords": [
         "yii2",
@@ -15,6 +15,11 @@
         {
             "name": "Naumenko Pavel",
             "email": "not.gosu@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Pushkin Ivan",
+            "email": "imetalguardi+yii2@gmail.com",
             "role": "Developer"
         }
     ],
