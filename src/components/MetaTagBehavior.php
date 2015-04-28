@@ -103,7 +103,7 @@ class MetaTagBehavior extends Behavior
     /**
      * Delete existing meta tags
      */
-    protected function deleteExistingMetaTags()
+    public function deleteExistingMetaTags()
     {
         /** @var ActiveRecord $model */
         $model = $this->owner;
