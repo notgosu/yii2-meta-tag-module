@@ -143,6 +143,7 @@ class MetaTagBehavior extends Behavior
 
         foreach ($metaTagList as $tag) {
             foreach ($this->languages as $language) {
+                //Record is not yet in DB
                 if (!isset($metaTags[$tag->id . $language])) {
                     $data = new MetaTagContent();
                     $data->model_id = $id;
@@ -155,6 +156,11 @@ class MetaTagBehavior extends Behavior
                     $data->populateRelation('metaTag', $tag);
 
                     $metaTags[$tag->id . $language] = $data;
+                } else {
+                    //Update exist data
+                    if (isset($this->metaTags[$tag->id . $language]['content'])) {
+                        $metaTags[$tag->id . $language]['content'] = $this->metaTags[$tag->id . $language]['content'];
+                    }
                 }
             }
         }
