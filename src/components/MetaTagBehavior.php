@@ -43,6 +43,7 @@ class MetaTagBehavior extends Behavior
             ActiveRecord::EVENT_AFTER_INSERT => 'saveMetaTags',
             ActiveRecord::EVENT_AFTER_UPDATE => 'saveMetaTags',
             ActiveRecord::EVENT_AFTER_FIND => 'loadMetaTags',
+            ActiveRecord::EVENT_AFTER_VALIDATE => 'loadMetaTags',
             ActiveRecord::EVENT_AFTER_DELETE => 'deleteExistingMetaTags'
         ];
     }
@@ -147,7 +148,9 @@ class MetaTagBehavior extends Behavior
                     $data->model_id = $id;
                     $data->model_name = $modelName;
                     $data->meta_tag_id = $tag->id;
-                    $data->content = $tag->default_value;
+                    $data->content = isset($this->metaTags[$tag->id . $language]['content'])
+                        ? $this->metaTags[$tag->id . $language]['content']
+                        : $tag->default_value;
                     $data->language = $language;
                     $data->populateRelation('metaTag', $tag);
 
