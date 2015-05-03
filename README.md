@@ -1,9 +1,9 @@
 # Yii2 meta tag module
-This behavior allow to create dynamic meta tags and fulfil them at any model.
+This module allow to create dynamic meta tags and fulfil them at any model.
 
 ## Install
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
+The preferred way to install this module is through [composer](http://getcomposer.org/download/).
 
 Either run
 
@@ -19,7 +19,7 @@ or add
 
 to the require section of your `composer.json` file.
 
-Apply behavior migrations:
+Apply module migrations:
 
 ```php
 ./yii migrate --migrationPath=@vendor/notgosu/yii2-meta-tag-module/src/migrations
@@ -28,7 +28,7 @@ Apply behavior migrations:
 
 ## Usage
 
-Connect behavior to required model:
+### Connect behavior to required model:
 
 ```php
      public function behaviors()
@@ -43,7 +43,7 @@ Connect behavior to required model:
      }
 ```
 
-Use widget to fulfil meta tags:
+### Use widget to fulfil meta tags:
 
 ```php
 echo \notgosu\yii2\modules\metaTag\widgets\metaTagForm\Widget::widget(['model' => $model])
@@ -51,7 +51,7 @@ echo \notgosu\yii2\modules\metaTag\widgets\metaTagForm\Widget::widget(['model' =
 
 where ```$model``` is instance of your AR model.
 
-To add new tags or edit existing add new module to your ```modules``` section of your main.php:
+### To add new tags or edit existing add module to your ```modules``` section of your main.php:
 
 ```php
  'modules' => [
@@ -62,7 +62,15 @@ To add new tags or edit existing add new module to your ```modules``` section of
     ],
 ```
 
-and go to http://yourWebSite.dev/seo/tag/index.
+and go to http://your-website.dev/seo/tag/index.
+
+
+### To register meta tags for certain AR model, simply call:
+```php
+ echo \notgosu\yii2\modules\metaTag\components\MetaTagRegister::register($model, Yii::$app->language);
+```
+
+from certain view or controller.
 
 ## Contributing
 
