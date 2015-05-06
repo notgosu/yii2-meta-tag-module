@@ -67,7 +67,7 @@ and go to http://your-website.dev/seo/tag/index.
 
 ### To register meta tags for certain AR model, simply call:
 ```php
- echo \notgosu\yii2\modules\metaTag\components\MetaTagRegister::register($model, Yii::$app->language);
+ \notgosu\yii2\modules\metaTag\components\MetaTagRegister::register($model, Yii::$app->language);
 ```
 
 from certain view or controller.
