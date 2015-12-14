@@ -21,6 +21,7 @@ use Yii;
 class MetaTag extends \yii\db\ActiveRecord
 {
     const META_TITLE_NAME = 'title';
+    const META_DESCRIPTION_NAME = 'description';
 
     /**
      * @inheritdoc
