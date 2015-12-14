@@ -43,7 +43,7 @@ class MetaTagRegister
         $metaTags = $metaTags->all();
 
         foreach ($metaTags as $metaTag) {
-            $content = $metaTag->content;
+            $content = $metaTag->getMetaTagContent();
             if (!empty($content)) {
                 if (strtolower($metaTag->metaTag->name) === MetaTag::META_TITLE_NAME) {
                     Yii::$app->getView()->title = $content;
