@@ -51,13 +51,7 @@ class MetaTagRegister
             $content = $metaTag->getMetaTagContent();
             if (!empty($content)) {
                 if (strtolower($metaTag->metaTag->name) === MetaTag::META_TITLE_NAME) {
-                    if (strpos($content, '[title]')) {
-                        $content = str_replace('[title]', Yii::$app->getView()->title, $content);
-                        
-                        Yii::$app->getView()->title = $content;
-                    } else {
-                        Yii::$app->getView()->title = $content;
-                    }
+                    Yii::$app->getView()->title = $content;
                 } elseif (strtolower($metaTag->metaTag->name) === MetaTag::META_SEO_TEXT) {
                     self::$seoText .= $content;
                 } elseif (strtolower($metaTag->metaTag->name) === MetaTag::META_ROBOTS) {
