@@ -1,5 +1,5 @@
 {
-    "name": "notgosu/yii2-meta-tag-module",
+    "name": "hanterrian/yii2-meta-tag-module",
     "description": "Yii2 meta tag module for creating and setting meta tags for your site",
     "version": "1.0.0",
     "type": "yii2-extension",
