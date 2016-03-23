@@ -17,6 +17,11 @@ use yii\helpers\ArrayHelper;
 class MetaTagRegister
 {
     /**
+     * @var string
+     */
+    private static $seoText = '';
+
+    /**
      * @param ActiveRecord $model
      * @param null|string $language
      * @param array|null $metaTagsToFetch
@@ -47,6 +52,16 @@ class MetaTagRegister
             if (!empty($content)) {
                 if (strtolower($metaTag->metaTag->name) === MetaTag::META_TITLE_NAME) {
                     Yii::$app->getView()->title = $content;
+                } elseif (strtolower($metaTag->metaTag->name) === MetaTag::META_SEO_TEXT) {
+                    self::$seoText .= $content;
+                } elseif (strtolower($metaTag->metaTag->name) === MetaTag::META_ROBOTS) {
+                    Yii::$app->view->registerMetaTag(
+                        [
+                            'name' => 'robots',
+                            'content' => 'noindex, FOLLOW',
+                        ],
+                        'robots'
+                    );
                 } else {
                     if ($metaTag->metaTag->name) {
                         Yii::$app->view->registerMetaTag(
@@ -60,5 +75,13 @@ class MetaTagRegister
                 }
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public static function getSeoText()
+    {
+        return self::$seoText;
     }
 }

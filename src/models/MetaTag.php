@@ -21,6 +21,8 @@ use Yii;
 class MetaTag extends \yii\db\ActiveRecord
 {
     const META_TITLE_NAME = 'title';
+    const META_SEO_TEXT = 'seo_text';
+    const META_ROBOTS = 'robots';
     const META_DESCRIPTION_NAME = 'description';
 
     /**
