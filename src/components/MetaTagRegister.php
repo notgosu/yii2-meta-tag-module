@@ -55,13 +55,15 @@ class MetaTagRegister
                 } elseif (strtolower($metaTag->metaTag->name) === MetaTag::META_SEO_TEXT) {
                     self::$seoText .= $content;
                 } elseif (strtolower($metaTag->metaTag->name) === MetaTag::META_ROBOTS) {
-                    Yii::$app->view->registerMetaTag(
-                        [
-                            'name' => 'robots',
-                            'content' => 'noindex, FOLLOW',
-                        ],
-                        'robots'
-                    );
+                    if ($content) {
+                        Yii::$app->view->registerMetaTag(
+                            [
+                                'name' => 'robots',
+                                'content' => 'noindex, FOLLOW',
+                            ],
+                            'robots'
+                        );
+                    }
                 } else {
                     if ($metaTag->metaTag->name) {
                         Yii::$app->view->registerMetaTag(
