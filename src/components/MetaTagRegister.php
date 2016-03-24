@@ -30,7 +30,7 @@ class MetaTagRegister
     {
         $metaTags = MetaTagContent::find()
             ->where([MetaTagContent::tableName() . '.model_id' => $model->id])
-            ->andWhere([MetaTagContent::tableName() . '.model_name' => (new \ReflectionClass($model))->getShortName()])
+            ->andWhere([MetaTagContent::tableName() . '.model_name' => $model->formName()])
             ->joinWith(['metaTag']);
 
         if (is_array($metaTagsToFetch)) {
