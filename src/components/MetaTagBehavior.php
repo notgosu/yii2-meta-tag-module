@@ -107,7 +107,7 @@ class MetaTagBehavior extends Behavior
     {
         /** @var ActiveRecord $model */
         $model = $this->owner;
-        $modelName = (new \ReflectionClass($model))->getShortName();
+        $modelName = $model->formName();
         $modelId = $model->id;
 
         \Yii::$app->db->createCommand()
@@ -127,7 +127,7 @@ class MetaTagBehavior extends Behavior
         $model = $this->owner;
         $metaTagList = $this->getTagList();
         $id = $model->id;
-        $modelName = (new \ReflectionClass($model))->getShortName();
+        $modelName = $model->formName();
         $metaTags = [];
         if (!$model->isNewRecord) {
             $metaTags = MetaTagContent::find()

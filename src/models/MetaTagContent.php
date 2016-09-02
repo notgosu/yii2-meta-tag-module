@@ -4,6 +4,7 @@ namespace notgosu\yii2\modules\metaTag\models;
 
 use notgosu\yii2\modules\metaTag\Module;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%meta_tag_content}}".
@@ -68,10 +69,13 @@ class MetaTagContent extends \yii\db\ActiveRecord
     public function getMetaTagContent()
     {
         $content = $this->content;
-        if(($this->metaTag->name == MetaTag::META_TITLE_NAME || $this->metaTag->name == MetaTag::META_DESCRIPTION_NAME)
-            && isset($_GET['page']) && $_GET['page'] > 1 ) {
+        $page = Yii::$app->request->get('page');
+
+        if ($this->metaTag->name == MetaTag::META_TITLE_NAME || $this->metaTag->name == MetaTag::META_DESCRIPTION_NAME
+            && isset($page) && $page > 1
+        ) {
             if (!empty($content)) {
-                $content = Module::t('metaTag', 'Page') . ' ' . $_GET['page'] . '. ' . $content;
+                $content = Module::t('metaTag', 'Page') . ' ' . $page . '. ' . $content;
             }
         }
         return $content;
