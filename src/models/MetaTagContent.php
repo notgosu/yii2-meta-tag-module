@@ -71,7 +71,7 @@ class MetaTagContent extends \yii\db\ActiveRecord
         $content = $this->content;
         $page = Yii::$app->request->get('page');
 
-        if ($this->metaTag->name == MetaTag::META_TITLE_NAME || $this->metaTag->name == MetaTag::META_DESCRIPTION_NAME
+        if (($this->metaTag->name == MetaTag::META_TITLE_NAME || $this->metaTag->name == MetaTag::META_DESCRIPTION_NAME)
             && isset($page) && $page > 1
         ) {
             if (!empty($content)) {
