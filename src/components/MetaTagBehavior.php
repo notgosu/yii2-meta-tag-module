@@ -18,6 +18,10 @@ use yii\validators\SafeValidator;
  */
 class MetaTagBehavior extends Behavior
 {
+    /**
+     * @var bool|array
+     */
+    protected static $_tagList = false;
 
     /**
      * Array of meta tag data list
@@ -175,9 +179,13 @@ class MetaTagBehavior extends Behavior
      */
     protected function getTagList()
     {
-        return MetaTag::find()
-            ->where('is_active = :is_active', [':is_active' => 1])
-            ->orderBy(['position' => SORT_DESC])
-            ->all();
+        if (static::$_tagList === false) {
+            static::$_tagList = MetaTag::find()
+                ->where('is_active = :is_active', [':is_active' => 1])
+                ->orderBy(['position' => SORT_DESC])
+                ->all();
+        }
+
+        return static::$_tagList;
     }
 }
