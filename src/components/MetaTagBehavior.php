@@ -21,7 +21,7 @@ class MetaTagBehavior extends Behavior
     /**
      * @var bool|array
      */
-    protected static $_tagList = false;
+    protected static $_tagList = [];
 
     /**
      * Array of meta tag data list
@@ -179,9 +179,9 @@ class MetaTagBehavior extends Behavior
      */
     protected function getTagList()
     {
-        if (static::$_tagList === false) {
+        if (!static::$_tagList) {
             static::$_tagList = MetaTag::find()
-                ->where('is_active = :is_active', [':is_active' => 1])
+                ->where(['is_active' => 1])
                 ->orderBy(['position' => SORT_DESC])
                 ->all();
         }
