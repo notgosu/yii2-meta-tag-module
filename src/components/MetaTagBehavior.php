@@ -38,6 +38,11 @@ class MetaTagBehavior extends Behavior
     public $languages;
 
     /**
+     * @var null|string
+     */
+    public $defaultFieldForTitle = null;
+
+    /**
      * @inheritdoc
      */
     public function events()
@@ -165,6 +170,14 @@ class MetaTagBehavior extends Behavior
                     if (isset($this->metaTags[$tag->id . $language]['content'])) {
                         $metaTags[$tag->id . $language]['content'] = $this->metaTags[$tag->id . $language]['content'];
                     }
+                }
+
+                //If this is a title and its empty, try to set the default one
+                if ($tag->name == 'title' &&
+                    empty($metaTags[$tag->id . $language]['content']) &&
+                    $this->defaultFieldForTitle
+                ) {
+                    $metaTags[$tag->id . $language]['content'] = $this->owner->{$this->defaultFieldForTitle};
                 }
             }
         }
