@@ -38,6 +38,7 @@ Apply module migrations:
              'seo' => [
                  'class' => \notgosu\yii2\modules\metaTag\components\MetaTagBehavior::className(),
                  'languages' => ['en', 'ua', 'ru'],
+                 //'defaultFieldForTitle' => 'label'
              ]
          ];
      }
