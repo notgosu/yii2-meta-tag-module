@@ -176,7 +176,7 @@ class MetaTagBehavior extends Behavior
                     $metaTags[$tag->id . $language] = $data;
                 } else {
                     //Update exist data
-                    if (isset($metaTags[$tag->id . $language]['content']) && $isSaveEvent) {
+                    if (isset($this->metaTags[$tag->id . $language]['content']) && $isSaveEvent) {
                         $metaTags[$tag->id . $language]['content'] = $this->metaTags[$tag->id . $language]['content'];
                     }
                 }
