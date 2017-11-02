@@ -52,7 +52,7 @@ class MetaTagBehavior extends Behavior
             ActiveRecord::EVENT_AFTER_INSERT => 'saveMetaTags',
             ActiveRecord::EVENT_AFTER_UPDATE => 'saveMetaTags',
             ActiveRecord::EVENT_AFTER_FIND => 'loadMetaTags',
-            ActiveRecord::EVENT_AFTER_VALIDATE => 'loadMetaTagsForSave',
+            ActiveRecord::EVENT_AFTER_VALIDATE => 'loadMetaTagsAfterValidate',
             ActiveRecord::EVENT_AFTER_DELETE => 'deleteExistingMetaTags'
         ];
     }
@@ -97,9 +97,9 @@ class MetaTagBehavior extends Behavior
     }
 
     /**
-     * Load exist meta tags after model find
+     * Load exist meta tags after model validate
      */
-    public function loadMetaTagsForSave()
+    public function loadMetaTagsAfterValidate()
     {
         $this->metaTags = $this->getExistingMetaTags();
     }
