@@ -52,7 +52,7 @@ class MetaTagBehavior extends Behavior
             ActiveRecord::EVENT_AFTER_INSERT => 'saveMetaTags',
             ActiveRecord::EVENT_AFTER_UPDATE => 'saveMetaTags',
             ActiveRecord::EVENT_AFTER_FIND => 'loadMetaTags',
-            ActiveRecord::EVENT_AFTER_VALIDATE => 'loadMetaTags',
+            ActiveRecord::EVENT_AFTER_VALIDATE => 'loadMetaTagsAfterValidate',
             ActiveRecord::EVENT_AFTER_DELETE => 'deleteExistingMetaTags'
         ];
     }
@@ -93,6 +93,14 @@ class MetaTagBehavior extends Behavior
      */
     public function loadMetaTags()
     {
+        $this->metaTags = $this->getExistingMetaTags(false);
+    }
+
+    /**
+     * Load exist meta tags after model validate
+     */
+    public function loadMetaTagsAfterValidate()
+    {
         $this->metaTags = $this->getExistingMetaTags();
     }
 
@@ -128,9 +136,10 @@ class MetaTagBehavior extends Behavior
     }
 
     /**
+     * @param bool $isSaveEvent
      * @return MetaTagContent[]
      */
-    protected function getExistingMetaTags()
+    protected function getExistingMetaTags($isSaveEvent = true)
     {
         /** @var ActiveRecord $model */
         $model = $this->owner;
@@ -167,8 +176,10 @@ class MetaTagBehavior extends Behavior
                     $metaTags[$tag->id . $language] = $data;
                 } else {
                     //Update exist data
-                    if (isset($this->metaTags[$tag->id . $language]['content'])) {
-                        $metaTags[$tag->id . $language]['content'] = $this->metaTags[$tag->id . $language]['content'];
+                    if (isset($this->metaTags[$tag->id . $language]['content']) && ($isSaveEvent || empty($metaTags[$tag->id . $language]['content']))) {
+                        $metaTags[$tag->id . $language]['content'] = !empty($this->metaTags[$tag->id . $language]['content'])
+                            ? $this->metaTags[$tag->id . $language]['content']
+                            : $tag->default_value;
                     }
                 }
 
