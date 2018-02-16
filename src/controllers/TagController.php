@@ -2,12 +2,14 @@
 
 namespace notgosu\yii2\modules\metaTag\controllers;
 
-use notgosu\yii2\modules\metaTag\models\MetaTag;
-use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
+
+use notgosu\yii2\modules\metaTag\Module;
+use notgosu\yii2\modules\metaTag\models\MetaTag;
 
 /**
  * TagController implements the CRUD actions for MetaTag model.
@@ -32,6 +34,9 @@ class TagController extends Controller
      */
     public function actionIndex()
     {
+		if (!\Yii::$app->user->can('index', [], false))
+		    throw new ForbiddenHttpException(Module::t('metaTag', 'Access denied.'));
+		
         $dataProvider = new ActiveDataProvider([
             'query' => MetaTag::find(),
         ]);
@@ -48,6 +53,9 @@ class TagController extends Controller
      */
     public function actionView($id)
     {
+        if (!\Yii::$app->user->can('view'))
+            throw new ForbiddenHttpException(Module::t('metaTag', 'Access denied.'));
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -60,9 +68,12 @@ class TagController extends Controller
      */
     public function actionCreate()
     {
+		if (!\Yii::$app->user->can('create'))
+		    throw new ForbiddenHttpException(Module::t('metaTag', 'Access denied.'));
+        
         $model = new MetaTag();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -80,8 +91,10 @@ class TagController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (\Yii::$app->user->can('update', ['model' => $model]))
+            throw new ForbiddenHttpException(Module::t('metaTag', 'Access denied.'));
+        
+        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -98,6 +111,9 @@ class TagController extends Controller
      */
     public function actionDelete($id)
     {
+		if (!\Yii::$app->user->can('delete'))
+			throw new ForbiddenHttpException(\Module::t('metaTag', 'Access denied.'));
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -115,7 +131,7 @@ class TagController extends Controller
         if (($model = MetaTag::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException(Module::t('metaTag', 'The requested model does not exist.'));
         }
     }
 }
